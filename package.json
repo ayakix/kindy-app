@@ -1,0 +1,19 @@
+{
+  "name": "kindy-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/webhook": "^6.1.0",
+    "chrome-aws-lambda": "^10.1.0",
+    "moment": "^2.29.3",
+    "puppeteer-core": "^10.4.0"
+  },
+  "devDependencies": {
+    "chrome-launcher": "^0.15.0",
+    "puppeteer": "^14.0.0"
+  }
+}
