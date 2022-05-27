@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create S3 bucket for layers
+# ------------------------------------------------------------#
+# Input Parameters
+# ------------------------------------------------------------#
+Parameters:
+  Project:
+    Type: String
+    Default: kindy
+
+Resources:
+# ------------------------------------------------------------#
+#  S3
+# ------------------------------------------------------------#
+# S3 Create
+  S3BucketForLayers:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: kindy-puppeteer-layers
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+# ------------------------------------------------------------#
+# Output Parameters
+# ------------------------------------------------------------#
+Outputs:
+  S3BucketForLayers:
+    Value: !Ref S3BucketForLayers
+    Export:
+      Name: !Sub "${Project}"

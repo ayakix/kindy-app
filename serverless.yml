@@ -19,22 +19,14 @@ provider:
         - s3:*
       Resource: "*"
 
-resources:
-  Resources:
-    LayersDeploymentBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: kindy-puppeteer-layers
-
 custom:
   serverless-layers:
-    layersDeploymentBucket: kindy-puppeteer-layers
+    layersDeploymentBucket: ${cf:kindy-resouce.S3BucketForLayers}
   prune:
     automatic: true
     number: 3
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-prune-plugin
   - serverless-layers
 

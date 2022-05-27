@@ -14,6 +14,8 @@
   },
   "devDependencies": {
     "chrome-launcher": "^0.15.0",
-    "puppeteer": "^14.0.0"
+    "puppeteer": "^14.0.0",
+    "serverless-layers": "^2.5.4",
+    "serverless-prune-plugin": "^2.0.1"
   }
 }

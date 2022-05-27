@@ -1,5 +1,16 @@
 ## 環境構築
+
+```sh
+aws cloudformation deploy \
+  --region ap-northeast-1 \
+  --profile YOUR_AWS_CREDENTIAL_PROFILE_NAME \
+  --template-file cfn.yml \
+  --stack-name kindy-resouce
+```
+
+```sh
 npm install
+```
 
 ディレクトリ直下に.envファイルを作成
 ```
