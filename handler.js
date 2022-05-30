@@ -2,6 +2,7 @@
 
 const moment = require("moment");
 const momentTimezone = require('moment-timezone');
+const { IncomingWebhook } = require("@slack/webhook");
 
 const getBrowser = async () => {
     let browser = null;
@@ -43,7 +44,7 @@ module.exports.crawl = async (event, context, callback) => {
       var text = null;
       var imageUrls = null;
       await page.on('requestfinished', async (request) => {
-        if (request.url().indexOf("home?q%5Bkid_id_eq") == -1) {
+        if (request.url().indexOf('home?q%5Bkid_id_eq') == -1) {
           return;
         }
         var response = await request.response();
@@ -55,11 +56,11 @@ module.exports.crawl = async (event, context, callback) => {
           }
 
           let data = obj.data[0];
-          if (data.target_date == moment().tz('Asia/Tokyo').format("YYYY/MM/DD")) {
+          if (data.target_date == moment().tz('Asia/Tokyo').format('YYYY/MM/DD')) {
             text = data.content;
             imageUrls = data.images.map(image => {
               return image.photo;
-            });
+            }).join('\n');
           }
         } catch (err) {
           // console.log(err);
@@ -68,8 +69,8 @@ module.exports.crawl = async (event, context, callback) => {
 
       await page.waitForTimeout(5 * 1000);
       if (text) {
-        console.log(text);
-        console.log(imageUrls);
+        const webhook = new IncomingWebhook(process.env.SLACK_WEBHOOK_URL);
+        await webhook.send(text + '\n' + imageUrls);
       }
 
       return callback(null, JSON.stringify({ result: 'OK' }));
