@@ -10,6 +10,7 @@
     "@slack/webhook": "^6.1.0",
     "chrome-aws-lambda": "^10.1.0",
     "moment": "^2.29.3",
+    "moment-timezone": "^0.5.34",
     "puppeteer-core": "^10.4.0"
   },
   "devDependencies": {
