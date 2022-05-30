@@ -41,3 +41,5 @@ functions:
     handler: handler.crawl
     timeout: 120
     memorySize: 512
+    events:
+      - schedule: cron(0 13 ? * MON-FRI *)
