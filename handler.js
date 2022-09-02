@@ -3,6 +3,7 @@
 const moment = require("moment");
 const momentTimezone = require('moment-timezone');
 const { IncomingWebhook } = require("@slack/webhook");
+const axios = require("axios");
 
 const getBrowser = async () => {
     let browser = null;
@@ -60,17 +61,40 @@ module.exports.crawl = async (event, context, callback) => {
             text = data.content;
             imageUrls = data.images.map(image => {
               return image.photo;
-            }).join('\n');
+            });
           }
         } catch (err) {
           // console.log(err);
         }
       });
 
+      const instance = axios.create({
+        baseURL: 'https://notify-api.line.me',
+        headers: {
+          "Authorization": "Bearer " + process.env.LINE_NOTIFY_TOKEN,
+          "Content-Type": "application/x-www-form-urlencoded",
+        }
+      })
+
       await page.waitForTimeout(5 * 1000);
       if (text) {
+        // Slack
         const webhook = new IncomingWebhook(process.env.SLACK_WEBHOOK_URL);
-        await webhook.send(text + '\n' + imageUrls);
+        await webhook.send(text + '\n' + imageUrls.join('\n'));
+
+        // LINE
+        var params = new URLSearchParams()
+        params.append('message', text + '\n' + imageUrls.join('\n'))
+        const res = instance.post('/api/notify', params)
+        await page.waitForTimeout(1 * 1000);
+        imageUrls.map(imageUrl => {
+          var params = new URLSearchParams()
+          params.append('message', " ")
+          params.append('imageThumbnail', imageUrl)
+          params.append('imageFullsize', imageUrl)
+          const res = instance.post('/api/notify', params)
+          page.waitForTimeout(1 * 1000);
+        });
       }
 
       return callback(null, JSON.stringify({ result: 'OK' }));
